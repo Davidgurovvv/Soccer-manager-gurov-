@@ -1,0 +1,128 @@
+import requests
+
+# Replace this with your GitHub personal access token
+GITHUB_TOKEN = "your_github_personal_access_token_here"
+
+# JSON file content to be uploaded
+json_content = """
+{
+    "PlayerData": [
+        {
+            "ID": 1,
+            "Forename": "Marcus",
+            "Surname": "Rashford",
+            "ClubID": 1,
+            "ImageURL": "<insert imageurl>",
+            "Potential": 99
+        },
+        {
+            "ID": 2,
+            "Forename": "Bruno",
+            "Surname": "Fernandes",
+            "ClubID": 1,
+            "ImageURL": "<insert imageurl>",
+            "Potential": 99
+        },
+        {
+            "ID": 3,
+            "Forename": "Casemiro",
+            "Surname": "",
+            "ClubID": 1,
+            "ImageURL": "<insert imageurl>",
+            "Potential": 99
+        },
+        {
+            "ID": 4,
+            "Forename": "Jhon",
+            "Surname": "Durran",
+            "ClubID": 1,
+            "ImageURL": "<insert imageurl>",
+            "Potential": 99,
+            "Rating": 81
+        }
+    ],
+    "ClubData": [
+        {
+            "ID": 1,
+            "Name": "Manchester United",
+            "ShortName": "MUN",
+            "ImageURL": "<insert imageurl>"
+        },
+        {
+            "ID": 2,
+            "Name": "Manchester City",
+            "ShortName": "MCI",
+            "ImageURL": "<insert imageurl>"
+        },
+        {
+            "ID": 3,
+            "Name": "Liverpool",
+            "ShortName": "LIV",
+            "ImageURL": "<insert imageurl>"
+        },
+        {
+            "ID": 4,
+            "Name": "Arsenal",
+            "ShortName": "ARS",
+            "ImageURL": "<insert imageurl>"
+        },
+        {
+            "ID": 5,
+            "Name": "Chelsea",
+            "ShortName": "CHE",
+            "ImageURL": "<insert imageurl>"
+        }
+    ],
+    "LeagueData": [
+        {
+            "ID": 28,
+            "Name": "Premier League",
+            "ImageURL": "<insert imageurl>"
+        }
+    ],
+    "CupData": [
+        {
+            "ID": 2,
+            "Name": "FA Cup",
+            "ImageURL": "<insert imageurl>"
+        }
+    ],
+    "StadiumData": [
+        {
+            "ID": 1,
+            "Name": "Old Trafford"
+        }
+    ]
+}
+"""
+
+# Endpoint to create a gist
+url = "https://api.github.com/gists"
+
+# Headers for authentication and data type
+headers = {
+    "Authorization": f"token {GITHUB_TOKEN}",
+    "Accept": "application/vnd.github.v3+json"
+}
+
+# Gist data
+data = {
+    "description": "Premier League Data Pack",
+    "public": True,
+    "files": {
+        "premier_league_data.json": {
+            "content": json_content
+        }
+    }
+}
+
+# Creating the Gist
+response = requests.post(url, headers=headers, json=data)
+
+# Checking if the Gist was successfully created
+if response.status_code == 201:
+    gist_url = response.json()['html_url']
+    print(f"Successfully created gist: {gist_url}")
+else:
+    print(f"Failed to create gist: {response.status_code}")
+    print(response.json())
